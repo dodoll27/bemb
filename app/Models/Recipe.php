@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-use App\Enums\IngredientType;
+use App\Enums\RecipeType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Ingredient extends Model
+class Recipe extends Model
 {
     use HasFactory;
 
@@ -18,8 +18,8 @@ class Ingredient extends Model
      */
     protected $fillable = [
         'name',
-        'type',
-        'nutritionalValues',
+        'instructions',
+        'nutritionalValue'
     ];
 
     /**
@@ -30,17 +30,16 @@ class Ingredient extends Model
     protected function casts(): array
     {
         return [
-            'type' => IngredientType::class,
             'nutritionalValues' => 'array',
         ];
     }
 
     /**
-     * The recipes that use this ingredient.
+     * The ingredients that belong to the recipe.
      */
-    public function recipes(): BelongsToMany
+    public function ingredients(): BelongsToMany
     {
-        return $this->belongsToMany(Recipe::class)
+        return $this->belongsToMany(Ingredient::class)
             ->withPivot('quantity', 'unit')
             ->withTimestamps();
     }
