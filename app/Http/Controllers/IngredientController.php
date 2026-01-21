@@ -11,4 +11,9 @@ class IngredientController extends Controller
     {
         return Ingredient::findOrFail($id);
     }
+    public function store(Request $request)
+    {
+        $ingredient = Ingredient::create($request->all());
+        return response()->json($ingredient, 201);
+    }
 }
