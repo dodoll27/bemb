@@ -30,7 +30,7 @@ class Recipe extends Model
     protected function casts(): array
     {
         return [
-            'nutritionalValues' => 'array',
+            'nutritionalValue' => 'array',
         ];
     }
 

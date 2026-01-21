@@ -1,1 +1,5 @@
 *.sqlite*
+UserSeeder.php
+IngredientSeeder.php
+RecipeSeeder.php
+DatabaseSeeder.php

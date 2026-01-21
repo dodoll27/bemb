@@ -17,3 +17,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 require __DIR__.'/settings.php';
+require __DIR__.'/user.php';
+require __DIR__.'/recipe.php';
+require __DIR__.'/ingredient.php';

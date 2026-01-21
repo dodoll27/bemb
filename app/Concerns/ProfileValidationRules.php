@@ -15,19 +15,10 @@ trait ProfileValidationRules
     protected function profileRules(?int $userId = null): array
     {
         return [
-            'name' => $this->nameRules(),
+            'firstname' => ['required', 'string', 'max:255'],
+            'lastname' => ['required', 'string', 'max:255'],
             'email' => $this->emailRules($userId),
         ];
-    }
-
-    /**
-     * Get the validation rules used to validate user names.
-     *
-     * @return array<int, \Illuminate\Contracts\Validation\Rule|array<mixed>|string>
-     */
-    protected function nameRules(): array
-    {
-        return ['required', 'string', 'max:255'];
     }
 
     /**
