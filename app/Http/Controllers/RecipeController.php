@@ -11,4 +11,10 @@ class RecipeController extends Controller
     {
         return Recipe::findOrFail($id);
     }
+
+    public function store(Request $request)
+    {
+        $recipe = Recipe::create($request->all());
+        return response()->json($recipe, 201);
+    }
 }

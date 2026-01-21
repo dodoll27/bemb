@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
         then: function () {
             Route::prefix('api')->group(base_path('routes/ingredient.php'));
+            Route::prefix('api')->group(base_path('routes/recipe.php'));
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {
