@@ -19,7 +19,8 @@ class Recipe extends Model
     protected $fillable = [
         'name',
         'instructions',
-        'nutritionalValue'
+        'nutritionalValue',
+        'isPrivate',
     ];
 
     /**
@@ -31,6 +32,7 @@ class Recipe extends Model
     {
         return [
             'nutritionalValue' => 'array',
+            'isPrivate' => 'boolean',
         ];
     }
 
