@@ -20,6 +20,11 @@ class UserController extends Controller
         return User::findOrFail($id);
     }
 
+    public function findByUsername(string $username)
+    {
+        return User::where('username', $username)->firstOrFail();
+    }
+
     public function update(Request $request, string $id)
     {
         $user = User::findOrFail($id);
