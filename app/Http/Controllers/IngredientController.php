@@ -16,4 +16,11 @@ class IngredientController extends Controller
         $ingredient = Ingredient::create($request->all());
         return response()->json($ingredient, 201);
     }
+
+    public function destroy(string $id)
+    {
+        $ingredient = Ingredient::findOrFail($id);
+        $ingredient->delete();
+        return response()->json(null, 204);
+    }
 }
