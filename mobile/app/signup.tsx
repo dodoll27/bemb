@@ -55,6 +55,7 @@ export default function SignUpPage() {
             }
             const data = await response.json();
             await SecureStore.setItemAsync('token', data.token);
+            await SecureStore.setItemAsync('user', JSON.stringify(data.user));
             router.replace('/(tabs)');
         } catch (error) {
             console.log('Sign up error:', error);

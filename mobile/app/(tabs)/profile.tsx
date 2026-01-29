@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SegmentedControl } from '../../components/SegmentedControl';
@@ -13,12 +13,31 @@ const TABS = [
     { key: 'liked', label: 'LIKED' },
 ];
 
+type User = {
+    id: number;
+    firstname: string;
+    lastname: string;
+    username: string;
+    email: string;
+};
+
 export default function ProfilePage() {
     const [activeTab, setActiveTab] = useState('recipes');
+    const [user, setUser] = useState<User | null>(null);
+
+    useEffect(() => {
+        const loadUser = async () => {
+            const userJson = await SecureStore.getItemAsync('user');
+            if (userJson) {
+                setUser(JSON.parse(userJson));
+            }
+        };
+        loadUser();
+    }, []);
 
     const onPressLogout = async () => {
-        console.log('Log Out button pressed');
         await SecureStore.deleteItemAsync('token');
+        await SecureStore.deleteItemAsync('user');
         router.replace('/login');
     };
 
@@ -62,7 +81,7 @@ export default function ProfilePage() {
     ];
 
     const filteredRecipes = recipes.filter(
-        (recipe) => recipe.category === activeTab
+        (recipe) => recipe.category === activeTab,
     );
 
     return (
@@ -139,7 +158,7 @@ export default function ProfilePage() {
                         </View>
 
                         <Text className="mb-1 text-2xl font-bold text-[#141514]">
-                            Teodora
+                            {user?.firstname || 'User'}
                         </Text>
                         <Text className="mb-2 text-sm text-[#737972]">
                             Culinary explorer & plant-based advocate
