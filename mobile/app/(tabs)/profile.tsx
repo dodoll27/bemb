@@ -19,6 +19,8 @@ type User = {
     lastname: string;
     username: string;
     email: string;
+    description?: string;
+    address?: string;
 };
 
 export default function ProfilePage() {
@@ -92,7 +94,7 @@ export default function ProfilePage() {
                     showsVerticalScrollIndicator={false}
                 >
                     <View className="flex-row items-center justify-between px-6 pb-2 pt-6">
-                        <View
+                        {/* <View
                             className="h-12 w-12 items-center justify-center rounded-full bg-[#f2f2eb]"
                             style={{
                                 shadowColor: '#d1d1c7',
@@ -102,11 +104,11 @@ export default function ProfilePage() {
                                 elevation: 8,
                             }}
                         >
-                            {/* <Ionicons
+                            <Ionicons
                                 name="arrow-back-ios"
                                 size={20}
                                 color="#6c8f66"
-                            /> */}
+                            />
                         </View>
                         <Text className="flex-1 text-center text-lg font-bold text-[#141514]">
                             Profile
@@ -126,7 +128,7 @@ export default function ProfilePage() {
                                 size={20}
                                 color="#6c8f66"
                             />
-                        </View>
+                        </View> */}
                     </View>
 
                     <View
@@ -170,7 +172,7 @@ export default function ProfilePage() {
                                 color="#6c8f66"
                             />
                             <Text className="text-sm font-medium text-[#6c8f66]">
-                                Nice, France
+                                {user?.address || 'Unknown Location'}
                             </Text>
                         </View>
                     </View>
