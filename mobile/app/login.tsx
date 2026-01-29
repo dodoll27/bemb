@@ -19,7 +19,7 @@ export default function LoginPage() {
         setLoading(true);
         try {
             const response = await fetch(
-                'http://10.73.187.158:8000/api/login',
+                'http://192.168.1.219:8000/api/login',
                 {
                     method: 'POST',
                     headers: {
@@ -50,7 +50,7 @@ export default function LoginPage() {
     };
 
     return (
-        <SafeAreaView className="flex-1 justify-center bg-white px-6">
+        <SafeAreaView className="flex-1 items-center justify-center bg-red-500 px-6">
             <Text className="mb-8 text-center text-lg">Login</Text>
 
             <TextInput
