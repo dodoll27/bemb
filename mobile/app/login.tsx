@@ -1,95 +1,83 @@
+import { router } from 'expo-router';
+import * as SecureStore from 'expo-secure-store';
 import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
+import { Alert, Text, TextInput, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function LoginPage() {
-    const [email, setEmail] = useState('');
+    const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
 
     const handleLogin = async () => {
-        if (!email || !password) {
+        if (!login || !password) {
             Alert.alert('Error', 'Please fill in all fields');
             return;
         }
 
         setLoading(true);
         try {
-            // Add your login API call here
-            console.log('Logging in with:', { email, password });
-            Alert.alert('Success', 'Login successful');
+            const response = await fetch(
+                'http://10.73.187.158:8000/api/login',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ login, password }),
+                },
+            );
+
+            if (!response.ok) {
+                Alert.alert('Error', 'Login failed');
+                const errorMessage =
+                    Error instanceof Error ? Error.message : 'Login failed';
+                Alert.alert('Error', errorMessage);
+                return;
+            }
+            const data = await response.json();
+            await SecureStore.setItemAsync('token', data.token);
+            router.replace('/(tabs)');
         } catch (error) {
-            Alert.alert('Error', 'Login failed');
+            console.log('Login error:', error);
+            const errorMessage =
+                error instanceof Error ? error.message : 'Login failed';
+            Alert.alert('Error', errorMessage);
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Login</Text>
-            
+        <SafeAreaView className="flex-1 justify-center bg-white px-6">
+            <Text className="mb-8 text-center text-lg">Login</Text>
+
             <TextInput
-                style={styles.input}
-                placeholder="Email"
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
+                className="mb-4 rounded-lg border border-gray-300 p-3 text-base"
+                placeholder="Login"
+                value={login}
+                onChangeText={setLogin}
                 editable={!loading}
             />
-            
+
             <TextInput
-                style={styles.input}
+                className="mb-4 rounded-lg border border-gray-300 p-3 text-base"
                 placeholder="Password"
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
                 editable={!loading}
             />
-            
+
             <TouchableOpacity
-                style={[styles.button, loading && styles.buttonDisabled]}
+                className={`rounded-lg bg-blue-600 p-4 ${loading ? 'opacity-60' : ''}`}
                 onPress={handleLogin}
                 disabled={loading}
             >
-                <Text style={styles.buttonText}>{loading ? 'Logging in...' : 'Login'}</Text>
+                <Text className="text-base font-semibold text-white">
+                    {loading ? 'Logging in...' : 'Login'}
+                </Text>
             </TouchableOpacity>
-        </View>
+        </SafeAreaView>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 20,
-        justifyContent: 'center',
-        backgroundColor: '#fff',
-    },
-    title: {
-        fontSize: 28,
-        fontWeight: 'bold',
-        marginBottom: 30,
-        textAlign: 'center',
-    },
-    input: {
-        borderWidth: 1,
-        borderColor: '#ddd',
-        padding: 12,
-        marginBottom: 16,
-        borderRadius: 8,
-        fontSize: 16,
-    },
-    button: {
-        backgroundColor: '#007AFF',
-        padding: 14,
-        borderRadius: 8,
-        alignItems: 'center',
-    },
-    buttonDisabled: {
-        opacity: 0.6,
-    },
-    buttonText: {
-        color: '#fff',
-        fontSize: 16,
-        fontWeight: '600',
-    },
-});
