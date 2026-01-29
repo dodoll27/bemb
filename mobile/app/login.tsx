@@ -1,3 +1,4 @@
+import { Button } from '@react-navigation/elements';
 import { router } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import React, { useState } from 'react';
@@ -78,6 +79,9 @@ export default function LoginPage() {
                     {loading ? 'Logging in...' : 'Login'}
                 </Text>
             </TouchableOpacity>
+            <Button onPress={() => router.replace('/signup')}>
+                Go to Sign Up
+            </Button>
         </SafeAreaView>
     );
 }
