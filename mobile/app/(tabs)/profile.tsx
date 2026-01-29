@@ -120,7 +120,7 @@ export default function ProfilePage() {
                         </View>
 
                         <Text className="mb-1 text-2xl font-bold text-[#141514]">
-                            Chef Julianne
+                            Teodora
                         </Text>
                         <Text className="mb-2 text-sm text-[#737972]">
                             Culinary explorer & plant-based advocate
@@ -237,28 +237,6 @@ export default function ProfilePage() {
                         </Pressable>
                     </View>
                 </ScrollView>
-                <View className="absolute bottom-0 left-0 right-0 flex-row items-center justify-between border-t border-[#6c8f66]/10 bg-[#f2f2eb]/80 px-8 py-4">
-                    <Ionicons name="home" size={24} color="#6c8f66" />
-                    <Ionicons name="search-outline" size={24} color="#737972" />
-                    <View
-                        className="-mt-10 h-12 w-12 items-center justify-center rounded-full border-4 border-[#f2f2eb] bg-[#6c8f66]"
-                        style={{
-                            shadowColor: '#6c8f66',
-                            shadowOffset: { width: 0, height: 4 },
-                            shadowOpacity: 0.4,
-                            shadowRadius: 12,
-                            elevation: 8,
-                        }}
-                    >
-                        <Ionicons name="add" size={28} color="white" />
-                    </View>
-                    <Ionicons
-                        name="notifications-outline"
-                        size={24}
-                        color="#737972"
-                    />
-                    <Ionicons name="person" size={24} color="#6c8f66" />
-                </View>
             </SafeAreaView>
         </View>
     );
