@@ -153,7 +153,7 @@ export default function ProfilePage() {
                         >
                             <Image
                                 source={{
-                                    uri: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAYxnBBMQpfkYldKUH0Wd60pYADrojXbmV2hhu1ffZj86tMr3xG61-zumU_NNSA2-zaN6QT3sFbqTkz9iEVJUgvXbng6FWrKFuCLXqdetkLOYAWiY2n-sD4jZ7Tfvbfdam38xZsPiquC5L-KzPS_zPx_6lTWTorgZWZLeul57-t8k4P2AF7JrC2fIyhiPe4dvm2C-m_qDku65KlyZvOGtrIA5Tr67C46_QQGCrw_9_tSdnBpPnnQrB6ZJHB6pGrT9dYofZvwFa8iZQr',
+                                    uri: 'https://avatars.githubusercontent.com/u/83964749?v=4',
                                 }}
                                 className="h-32 w-32 rounded-full border-4 border-white"
                             />
