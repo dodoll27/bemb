@@ -98,13 +98,13 @@ export default function HomeScreen() {
 
     return (
         <View className="flex-1 bg-[#F7F4EF]">
-            <SafeAreaView edges={['top']} className="bg-[#F7F4EF]/80">
+            <SafeAreaView edges={['top']} className="bg-[#F7F4EF]/80 ">
                 <View className="flex-row items-center justify-between border-b border-black/5 px-6 py-4">
                     <View className="w-10" />
                     <Text className="text-xl font-bold tracking-tight text-[#6c8f66]">
                         Mange Bien
                     </Text>
-                    <Pressable className="h-10 w-10 items-center justify-center rounded-full border border-black/5 bg-white shadow-sm">
+                    <Pressable className="h-10 w-10 items-center justify-center rounded-full bg-[#F7F4EF] shadow-sm">
                         <Ionicons name="search" size={20} color="#000" />
                     </Pressable>
                 </View>

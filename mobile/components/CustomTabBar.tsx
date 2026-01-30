@@ -18,11 +18,11 @@ export function CustomTabBar({ state, navigation }: BottomTabBarProps) {
             edges={['bottom']}
             className="absolute bottom-0 left-0 right-0"
         >
-            <View className="mx-auto mb-8 w-[90%] max-w-md">
+            <View className="mx-auto w-[90%] max-w-md">
                 <BlurView
                     intensity={80}
                     tint="light"
-                    className="h-16 overflow-hidden rounded-full border border-white/30 shadow-2xl"
+                    className="h-16 overflow-hidden rounded-full shadow-2xl"
                 >
                     <View className="flex-1 flex-row items-center justify-around px-4">
                         {state.routes.map((route, index) => {

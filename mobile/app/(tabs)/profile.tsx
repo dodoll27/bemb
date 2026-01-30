@@ -93,44 +93,6 @@ export default function ProfilePage() {
                     className="flex-1"
                     showsVerticalScrollIndicator={false}
                 >
-                    <View className="flex-row items-center justify-between px-6 pb-2 pt-6">
-                        {/* <View
-                            className="h-12 w-12 items-center justify-center rounded-full bg-[#f2f2eb]"
-                            style={{
-                                shadowColor: '#d1d1c7',
-                                shadowOffset: { width: 8, height: 8 },
-                                shadowOpacity: 1,
-                                shadowRadius: 16,
-                                elevation: 8,
-                            }}
-                        >
-                            <Ionicons
-                                name="arrow-back-ios"
-                                size={20}
-                                color="#6c8f66"
-                            />
-                        </View>
-                        <Text className="flex-1 text-center text-lg font-bold text-[#141514]">
-                            Profile
-                        </Text>
-                        <View
-                            className="h-12 w-12 items-center justify-center rounded-full bg-[#f2f2eb]"
-                            style={{
-                                shadowColor: '#d1d1c7',
-                                shadowOffset: { width: 8, height: 8 },
-                                shadowOpacity: 1,
-                                shadowRadius: 16,
-                                elevation: 8,
-                            }}
-                        >
-                            <Ionicons
-                                name="moon-outline"
-                                size={20}
-                                color="#6c8f66"
-                            />
-                        </View> */}
-                    </View>
-
                     <View
                         className="mx-6 my-2 items-center rounded-xl bg-[#f2f2eb] p-8"
                         style={{

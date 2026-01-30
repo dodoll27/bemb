@@ -19,7 +19,7 @@ export default function LoginPage() {
         setLoading(true);
         try {
             const response = await fetch(
-                'http://192.168.1.219:8000/api/login',
+                'http://10.73.187.158:8000/api/login',
                 {
                     method: 'POST',
                     headers: {
@@ -39,6 +39,7 @@ export default function LoginPage() {
             const data = await response.json();
             await SecureStore.setItemAsync('token', data.token);
             await SecureStore.setItemAsync('user', JSON.stringify(data.user));
+            console.log('Login successful:', data);
             router.replace('/(tabs)');
         } catch (error) {
             console.log('Login error:', error);

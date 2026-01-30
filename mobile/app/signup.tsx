@@ -29,7 +29,7 @@ export default function SignUpPage() {
         setLoading(true);
         try {
             const response = await fetch(
-                'http://192.168.1.219:8000/api/signup',
+                'http://10.73.187.158:8000/api/signup',
                 {
                     method: 'POST',
                     headers: {
