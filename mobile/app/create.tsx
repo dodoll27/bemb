@@ -1,11 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import React, { useEffect, useState } from 'react';
-import { Image, Pressable, ScrollView, Text, View } from 'react-native';
+import { Image, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { SegmentedControl } from '../../components/SegmentedControl';
-import { SmallCard } from '../../components/SmallCard';
+import { SegmentedControl } from '../components/SegmentedControl';
+import { SmallCard } from '../components/SmallCard';
 
 const TABS = [
     { key: 'recipes', label: 'MY RECIPES' },
@@ -23,7 +22,7 @@ type User = {
     address?: string;
 };
 
-export default function CreateRecipe() {
+export default function Create() {
     const [activeTab, setActiveTab] = useState('recipes');
     const [user, setUser] = useState<User | null>(null);
 
@@ -36,12 +35,6 @@ export default function CreateRecipe() {
         };
         loadUser();
     }, []);
-
-    const onPressLogout = async () => {
-        await SecureStore.deleteItemAsync('token');
-        await SecureStore.deleteItemAsync('user');
-        router.replace('/login');
-    };
 
     const recipes = [
         {
@@ -241,17 +234,6 @@ export default function CreateRecipe() {
                         {filteredRecipes.map((recipe, index) => (
                             <SmallCard key={index} recipe={recipe} />
                         ))}
-                    </View>
-
-                    <View className="px-6 pb-20">
-                        <Pressable
-                            onPress={onPressLogout}
-                            className="h-11 items-center justify-center rounded-full bg-red-500"
-                        >
-                            <Text className="font-bold text-white">
-                                Log Out
-                            </Text>
-                        </Pressable>
                     </View>
                 </ScrollView>
             </SafeAreaView>

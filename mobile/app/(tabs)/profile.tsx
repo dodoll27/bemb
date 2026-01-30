@@ -103,6 +103,28 @@ export default function ProfilePage() {
                             elevation: 8,
                         }}
                     >
+                        <View className="flex w-full flex-row justify-between">
+                            <Pressable
+                                className="w-min"
+                                onPress={() => router.push('/create')}
+                            >
+                                <Ionicons
+                                    name="pencil-sharp"
+                                    size={28}
+                                    color="#6c8f66"
+                                />
+                            </Pressable>
+                            <Pressable
+                                className="w-min"
+                                onPress={() => router.push('/create')}
+                            >
+                                <Ionicons
+                                    name="settings-sharp"
+                                    size={28}
+                                    color="#6c8f66"
+                                />
+                            </Pressable>
+                        </View>
                         <View
                             className="mb-4 rounded-full bg-[#f2f2eb] p-1"
                             style={{

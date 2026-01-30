@@ -8,7 +8,6 @@ export function CustomTabBar({ state, navigation }: BottomTabBarProps) {
     const icons: { [key: string]: keyof typeof Ionicons.glyphMap } = {
         index: 'home',
         explore: 'search-outline',
-        add: 'add',
         saved: 'bookmark-outline',
         profile: 'person',
     };
@@ -29,26 +28,26 @@ export function CustomTabBar({ state, navigation }: BottomTabBarProps) {
                             const isFocused = state.index === index;
                             const iconName = icons[route.name] || 'ellipse';
 
-                            if (index === 2) {
-                                return (
-                                    <Pressable
-                                        key={route.key}
-                                        className="h-10 w-10 scale-125 items-center justify-center rounded-full  bg-[#6c8f66] shadow-sm"
-                                        onPress={() => {
-                                            console.log('Add pressed');
-                                        }}
-                                    >
-                                        <Ionicons
-                                            name="add"
-                                            size={28}
-                                            color="white"
-                                        />
-                                    </Pressable>
-                                );
-                            }
-                            {
-                                console.log(route.name, iconName);
-                            }
+                            // if (index === 2) {
+                            //     return (
+                            //         <Pressable
+                            //             key={route.key}
+                            //             className="h-10 w-10 scale-125 items-center justify-center rounded-full  bg-[#6c8f66] shadow-sm"
+                            //             onPress={() =>
+                            //                 router.replace('/create')
+                            //             }
+                            //         >
+                            //             <Ionicons
+                            //                 name="add"
+                            //                 size={28}
+                            //                 color="white"
+                            //             />
+                            //         </Pressable>
+                            //     );
+                            // }
+                            // {
+                            //     console.log(route.name, iconName);
+                            // }
 
                             return (
                                 <Pressable

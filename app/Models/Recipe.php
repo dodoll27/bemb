@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\RecipeType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -23,6 +22,7 @@ class Recipe extends Model
         'instructions',
         'nutritionalValue',
         'isPrivate',
+        'image',
     ];
 
     /**

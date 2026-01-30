@@ -13,6 +13,7 @@ export default function TabLayout() {
         >
             <Tabs.Screen name="index" />
             <Tabs.Screen name="explore" />
+            <Tabs.Screen name="saved" />
             <Tabs.Screen name="profile" />
         </Tabs>
     );
