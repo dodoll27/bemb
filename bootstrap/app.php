@@ -17,6 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
             Route::middleware('api')->prefix('api')->group(base_path('routes/ingredient.php'));
             Route::middleware('api')->prefix('api')->group(base_path('routes/recipe.php'));
             Route::middleware('api')->prefix('api')->group(base_path('routes/user.php'));
+            Route::middleware('api')->prefix('api')->group(base_path('routes/auth.php'));
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {
