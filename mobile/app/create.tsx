@@ -1,242 +1,369 @@
-import { Ionicons } from '@expo/vector-icons';
-import * as SecureStore from 'expo-secure-store';
-import React, { useEffect, useState } from 'react';
-import { Image, ScrollView, Text, View } from 'react-native';
+import Ionicons from '@expo/vector-icons/build/Ionicons';
+import * as ImagePicker from 'expo-image-picker';
+import { Stack } from 'expo-router';
+import React, { useState } from 'react';
+import {
+    Image,
+    Modal,
+    Pressable,
+    ScrollView,
+    Text,
+    TextInput,
+    View,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { SegmentedControl } from '../components/SegmentedControl';
-import { SmallCard } from '../components/SmallCard';
-
-const TABS = [
-    { key: 'recipes', label: 'MY RECIPES' },
-    { key: 'collections', label: 'COLLECTIONS' },
-    { key: 'liked', label: 'LIKED' },
-];
-
-type User = {
-    id: number;
-    firstname: string;
-    lastname: string;
-    username: string;
-    email: string;
-    description?: string;
-    address?: string;
-};
 
 export default function Create() {
-    const [activeTab, setActiveTab] = useState('recipes');
-    const [user, setUser] = useState<User | null>(null);
+    const [name, setName] = useState('');
+    const [image, setImage] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
+    const [instructions, setInstructions] = useState('');
+    const [searchQuery, setSearchQuery] = useState('');
+    const [modalVisible, setModalVisible] = useState(false);
+    const [searchResults, setSearchResults] = useState<any[]>([]);
+    const [selectedIngredients, setSelectedIngredients] = useState<
+        {
+            name: string;
+            image?: string;
+            nutritionalValues?: any;
+        }[]
+    >([]);
+    const openSearch = () => {
+        setModalVisible(true);
+    };
+    const uploadToCloudinary = async (imageUri: string) => {
+        const formData = new FormData();
+        formData.append('file', {
+            uri: imageUri,
+            type: 'image/jpeg',
+            name: 'upload.jpg',
+        } as any);
+        formData.append('upload_preset', 'recipe_images');
 
-    useEffect(() => {
-        const loadUser = async () => {
-            const userJson = await SecureStore.getItemAsync('user');
-            if (userJson) {
-                setUser(JSON.parse(userJson));
+        const response = await fetch(
+            'https://api.cloudinary.com/v1_1/dwgr0t8hh/image/upload',
+            {
+                method: 'POST',
+                body: formData,
+            },
+        );
+
+        const data = await response.json();
+        return data.secure_url;
+    };
+    const handleSubmit = async () => {
+        console.log('1. Starting submit');
+        if (!name) {
+            alert('Please enter a name');
+            return;
+        }
+        setLoading(true);
+        try {
+            let imageUrl: string | null = null;
+            if (image) {
+                console.log('2. Uploading to Cloudinary');
+                imageUrl = await uploadToCloudinary(image);
+                console.log('3. Cloudinary URL:', imageUrl);
             }
-        };
-        loadUser();
-    }, []);
 
-    const recipes = [
-        {
-            id: 1,
-            name: 'Summer Pesto Pasta',
-            image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAeCHt_b-LZmOLDNokLtPfBOEBI6iXxj70GX-lIXWVUlWhNqBROCo6PLyWCq3uNNUYin2u_DY46R4Oj2oFTo16XjCAFDVDkVWh3JGi6NYK2qIYQrMOEEq-XvWulhICp3Y_YyNpjhZwpFYz0G2ntdfLRM7oOQ9OS64z3Es6cMoftz3TVSaYOatzKVaqwirJCi8bu0nbmwJBFY4tnyCtn5daTEnCf-Fp-EAEWerel2Cg1mc4zQXLHfmzcp6s9-uuCog6jzdfeeidFfGtj',
-            category: 'recipes',
-        },
-        {
-            id: 2,
-            name: 'Avocado Toast',
-            image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD56e7H3xeQLxWh_mr6Wyl-kF21L8sV_XGwuH-XYw-VRnj5DDLuvIGH97mMKEZTyj3wFaUZD2EpWUJ03og9nGlvfBD3UUJmRqDakw4A_j0hRO9molQVFBlxKVNfEWs0Nwl71A_mvGwDylkiu_nFJ-wIaMzU13w8oLsA324o7aH9l8A-3nVsMY5GYv8_awhho-jLGgVoTYeTTReGDqhSU0PB7TQgsI5xYD77jK7OIQbxyHrTtnZS0yhiuX_Z_oTrwg6iPh0cV_lshqMu',
-            category: 'recipes',
-        },
-        {
-            id: 3,
-            name: 'Herbal Infusions',
-            image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBWboWOLBczZooQkf7b_frvAAq_Wg2v5NCQKnNagHSIync5lMiXGKSMdUTKX9kYTMLJz97krhvLDcae0CLiHH2rj1xuFS0OFPG_kcKiqhBI9SadChF4Vzd3gKPUiyDxmSDRECXpnD6bbI6jZUCbtI3BFG2GaBlAPQe3kd6p__XtSrjXB71nAHFFsogvsKofy3V50LYU8DHV5j4dHYLs73O3PQWXvAZ_vrfrP10sDPXd9t5gtns2g0jN52f3VOMZZpH7tJxMwXUKO4Ag',
-            category: 'collections',
-        },
-        {
-            id: 4,
-            name: 'Miso Salmon',
-            image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBz5xCwf5oOyje8XGH-v9TUoVMgescSV6UliX5kz2t4tBEp1JLOe9OeP0tIaoA-zTsj2aZm7Dhqc_bLMUTQjZss2v1ybJ9Znpj-d0kqPW-MgErzMbL31RYXAQayztd0rgMpHjfgqGKvTeaF-GnjtV165LVoPeUXnXQcqxYe0FeJJlTxlfmOd-v-KpvEXS-E-IEnlm6Hgp5ltHj-l5yQ3vPpFlxcZMtIW4ypHCukXA_zIR7UIITmKf87_ctLKZRE8-Of99OAJ74PaTUF',
-            category: 'collections',
-        },
-        {
-            id: 5,
-            name: 'Quinoa Power Bowl',
-            image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBndcl8d0kIiyBltq66XrCcbZiS6xlMljN8ia6qxLtek76JGkvYahkMFEpV2evD-djeUN53WAhiTBaKyOizytl-wS4cDxfzCkD_aBP6d6cAXzls6bUU0UL4GraOn9yo9LmpGF9AErfoz8eZGbd3UqtqzKuLillBkdAY2VSYFBnsZGq92N-5ZMdEAS8jtk7HGbn4-JglDNlQF-jGgP1gPUNFgQX-K1q5h6L1OZBJcPWYlTfO0FtBz4E8-RPm1Fc9Ir1sHUQW0FrR-JjT',
-            category: 'liked',
-        },
-        {
-            id: 6,
-            name: 'Berry Parfait',
-            image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAlxxZxw9cSpf0aHaZwy7dh7Z_g7LHyzFUcEXU6olra8-OTwNAAkeRMcYco9cN49nNnuJKkxiabGGhq_7djz6WwmMGYHDrWWe4tIdkNpevf63l88kPZP5EdlRIRAXKGrvQUxNvyU6QM1Pr3skMiBOk-L2u6NNQwtzAp2L6GFC43OdFwKSAKZgUu_ZNoDaq9FrhGd1lLSLDZ9G0FXJ_-jcWSyd584slXAF5JsCTcH7kwO1_ClPOVKz5Dyfqg23CiJz4bl9XDQ4J31DqZ',
-            category: 'liked',
-        },
-    ];
+            console.log('4. Sending to Laravel');
+            const response = await fetch(
+                'http://10.73.187.158:8000/api/recipe',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name,
+                        instructions,
+                        image: imageUrl,
+                        ingredients: selectedIngredients,   
+                    }),
+                },
+            );
 
-    const filteredRecipes = recipes.filter(
-        (recipe) => recipe.category === activeTab,
-    );
+            console.log('5. Response status:', response.status);
+            const text = await response.text();
+            console.log('6. Response text:', text);
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            alert(`Created: ${name}`);
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Failed to create recipe');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const searchIngredients = async (query: string) => {
+        if (query.length < 2) {
+            setSearchResults([]);
+            return;
+        }
+
+        try {
+            const response = await fetch(
+                `https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(query)}&json=true&page_size=10`,
+            );
+            const data = await response.json();
+            console.log('Search results:', data.products);
+            setSearchResults(data.products || []);
+        } catch (error) {
+            console.error('Search error:', error);
+        }
+    };
+
+    const pickImage = async () => {
+        console.log('1. Starting pickImage');
+
+        try {
+            const permissionResult =
+                await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+            console.log('2. Permission result:', permissionResult);
+
+            if (!permissionResult.granted) {
+                console.log('Permission denied');
+                return;
+            }
+
+            console.log('3. Launching picker');
+
+            let result = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                allowsEditing: true,
+                aspect: [1, 1],
+                quality: 1,
+            });
+
+            console.log('4. Picker result:', result);
+
+            if (!result.canceled) {
+                console.log('5. Setting image:', result.assets[0].uri);
+                setImage(result.assets[0].uri);
+            }
+        } catch (error) {
+            console.log('Error in pickImage:', error);
+        }
+    };
 
     return (
         <View className="flex-1 bg-[#f2f2eb]">
+            <Stack.Screen options={{ headerShown: false }} />
+
             <SafeAreaView className="flex-1">
+                <Pressable
+                    onPress={handleSubmit}
+                    className="m-4 h-16 w-16 items-center justify-center self-end rounded-full bg-[#6c8f66] shadow-sm"
+                >
+                    <Ionicons name="checkmark" size={20} color="#fff" />
+                </Pressable>
                 <ScrollView
                     className="flex-1"
                     showsVerticalScrollIndicator={false}
                 >
-                    <View className="flex-row items-center justify-between px-6 pb-2 pt-6">
-                        {/* <View
-                            className="h-12 w-12 items-center justify-center rounded-full bg-[#f2f2eb]"
-                            style={{
-                                shadowColor: '#d1d1c7',
-                                shadowOffset: { width: 8, height: 8 },
-                                shadowOpacity: 1,
-                                shadowRadius: 16,
-                                elevation: 8,
-                            }}
-                        >
-                            <Ionicons
-                                name="arrow-back-ios"
-                                size={20}
-                                color="#6c8f66"
-                            />
-                        </View>
-                        <Text className="flex-1 text-center text-lg font-bold text-[#141514]">
-                            Profile
-                        </Text>
-                        <View
-                            className="h-12 w-12 items-center justify-center rounded-full bg-[#f2f2eb]"
-                            style={{
-                                shadowColor: '#d1d1c7',
-                                shadowOffset: { width: 8, height: 8 },
-                                shadowOpacity: 1,
-                                shadowRadius: 16,
-                                elevation: 8,
-                            }}
-                        >
-                            <Ionicons
-                                name="moon-outline"
-                                size={20}
-                                color="#6c8f66"
-                            />
-                        </View> */}
-                    </View>
-
-                    <View
-                        className="mx-6 my-2 items-center rounded-xl bg-[#f2f2eb] p-8"
+                    <TextInput
+                        placeholder="Name"
+                        value={name}
+                        onChangeText={setName}
+                        className="m-4 rounded-full border border-gray-300 px-4 py-2 text-base shadow-sm"
                         style={{
                             shadowColor: '#d1d1c7',
-                            shadowOffset: { width: 4, height: 4 },
-                            shadowOpacity: 1,
-                            shadowRadius: 16,
-                            elevation: 8,
+                            shadowOffset: { width: 0, height: 2 },
+                            shadowOpacity: 0.3,
+                            shadowRadius: 4,
+                            elevation: 4,
+                        }}
+                    />
+                    <Pressable
+                        onPress={openSearch}
+                        className="m-4 items-center justify-center rounded-lg bg-[#6c8f66] px-6 py-3"
+                        style={{
+                            shadowColor: '#d1d1c7',
+                            shadowOffset: { width: 0, height: 2 },
+                            shadowOpacity: 0.3,
+                            shadowRadius: 4,
+                            elevation: 4,
                         }}
                     >
-                        <View
-                            className="mb-4 rounded-full bg-[#f2f2eb] p-1"
-                            style={{
-                                shadowColor: '#d1d1c7',
-                                shadowOffset: { width: 4, height: 4 },
-                                shadowOpacity: 1,
-                                shadowRadius: 8,
-                                elevation: 4,
-                            }}
-                        >
-                            <Image
-                                source={{
-                                    uri: 'https://avatars.githubusercontent.com/u/83964749?v=4',
-                                }}
-                                className="h-32 w-32 rounded-full border-4 border-white"
-                            />
-                        </View>
-
-                        <Text className="mb-1 text-2xl font-bold text-[#141514]">
-                            {user?.firstname || 'User'}
+                        <Text className="text-lg  text-white">
+                            Search Ingredients
                         </Text>
-                        <Text className="mb-2 text-sm text-[#737972]">
-                            Culinary explorer & plant-based advocate
-                        </Text>
-                        <View className="flex-row items-center gap-1">
-                            <Ionicons
-                                name="location"
-                                size={14}
-                                color="#6c8f66"
-                            />
-                            <Text className="text-sm font-medium text-[#6c8f66]">
-                                {user?.address || 'Unknown Location'}
-                            </Text>
-                        </View>
-                    </View>
-
-                    <View className="flex-row gap-4 px-6 py-2">
-                        <View
-                            className="flex-1 items-center rounded-xl bg-[#f2f2eb] p-4"
-                            style={{
-                                shadowColor: '#d1d1c7',
-                                shadowOffset: { width: 4, height: 4 },
-                                shadowOpacity: 1,
-                                shadowRadius: 16,
-                                elevation: 8,
-                            }}
-                        >
-                            <Text className="text-xl font-bold text-[#6c8f66]">
-                                1.2k
-                            </Text>
-                            <Text className="text-xs font-medium uppercase tracking-widest text-[#737972]">
-                                Followers
-                            </Text>
-                        </View>
-                        <View
-                            className="flex-1 items-center rounded-xl bg-[#f2f2eb] p-4"
-                            style={{
-                                shadowColor: '#d1d1c7',
-                                shadowOffset: { width: 4, height: 4 },
-                                shadowOpacity: 1,
-                                shadowRadius: 16,
-                                elevation: 8,
-                            }}
-                        >
-                            <Text className="text-xl font-bold text-[#6c8f66]">
-                                48
-                            </Text>
-                            <Text className="text-xs font-medium uppercase tracking-widest text-[#737972]">
-                                Recipes
-                            </Text>
-                        </View>
-                        <View
-                            className="flex-1 items-center rounded-xl bg-[#f2f2eb] p-4"
-                            style={{
-                                shadowColor: '#d1d1c7',
-                                shadowOffset: { width: 4, height: 4 },
-                                shadowOpacity: 1,
-                                shadowRadius: 16,
-                                elevation: 8,
-                            }}
-                        >
-                            <Text className="text-xl font-bold text-[#6c8f66]">
-                                3.5k
-                            </Text>
-                            <Text className="text-xs font-medium uppercase tracking-widest text-[#737972]">
-                                Saves
-                            </Text>
-                        </View>
-                    </View>
-
-                    <SegmentedControl
-                        tabs={TABS}
-                        activeTab={activeTab}
-                        onTabChange={setActiveTab}
+                    </Pressable>
+                    <TextInput
+                        placeholder="Instructions"
+                        value={instructions}
+                        onChangeText={setInstructions}
+                        className="m-4 rounded-full border border-gray-300 px-4 py-2 text-base shadow-sm"
+                        style={{
+                            shadowColor: '#d1d1c7',
+                            shadowOffset: { width: 0, height: 2 },
+                            shadowOpacity: 0.3,
+                            shadowRadius: 4,
+                            elevation: 4,
+                        }}
                     />
-
-                    <View className="flex-row flex-wrap px-6 pb-32">
-                        {filteredRecipes.map((recipe, index) => (
-                            <SmallCard key={index} recipe={recipe} />
-                        ))}
-                    </View>
                 </ScrollView>
+
+                <Pressable
+                    onPress={pickImage}
+                    className="m-4 items-center justify-center rounded-full bg-[#6c8f66] px-6 py-3"
+                    style={{
+                        shadowColor: '#6c8f66',
+                        shadowOffset: { width: 0, height: 2 },
+                        shadowOpacity: 0.3,
+                        shadowRadius: 4,
+                        elevation: 8,
+                    }}
+                >
+                    {image ? (
+                        <Image
+                            source={{ uri: image }}
+                            className="h-[300px] w-[300px] rounded-xl"
+                        />
+                    ) : (
+                        <Text className="text-lg font-semibold text-white">
+                            Add image
+                        </Text>
+                    )}
+                </Pressable>
             </SafeAreaView>
+            <Modal
+                visible={modalVisible}
+                animationType="slide"
+                transparent={true}
+                onRequestClose={() => setModalVisible(false)}
+            >
+                <View
+                    style={{
+                        flex: 1,
+                        backgroundColor: 'rgba(0,0,0,0.5)',
+                        justifyContent: 'flex-end',
+                    }}
+                >
+                    <View
+                        style={{
+                            height: '60%',
+                            backgroundColor: 'white',
+                            borderTopLeftRadius: 20,
+                            borderTopRightRadius: 20,
+                            padding: 16,
+                        }}
+                    >
+                        <Pressable onPress={() => setModalVisible(false)}>
+                            <Text style={{ textAlign: 'right', fontSize: 18 }}>
+                                Close
+                            </Text>
+                        </Pressable>
+                        <Text
+                            style={{
+                                fontSize: 18,
+                                fontWeight: 'bold',
+                                marginTop: 16,
+                            }}
+                        >
+                            Search Ingredients
+                        </Text>
+                        {selectedIngredients.length > 0 && (
+                            <View style={{ margin: 16 }}>
+                                <Text
+                                    style={{
+                                        fontWeight: 'bold',
+                                        marginBottom: 8,
+                                    }}
+                                >
+                                    Ingredients:
+                                </Text>
+                                {selectedIngredients.map(
+                                    (ingredient, index) => (
+                                        <View
+                                            key={index}
+                                            style={{
+                                                flexDirection: 'row',
+                                                alignItems: 'center',
+                                                marginBottom: 8,
+                                            }}
+                                        >
+                                            <Text style={{ flex: 1 }}>
+                                                {ingredient.name}
+                                            </Text>
+                                            <Pressable
+                                                onPress={() => {
+                                                    setSelectedIngredients(
+                                                        selectedIngredients.filter(
+                                                            (_, i) =>
+                                                                i !== index,
+                                                        ),
+                                                    );
+                                                }}
+                                            >
+                                                <Text style={{ color: 'red' }}>
+                                                    Remove
+                                                </Text>
+                                            </Pressable>
+                                        </View>
+                                    ),
+                                )}
+                            </View>
+                        )}
+                        <TextInput
+                            placeholder="Search..."
+                            value={searchQuery}
+                            onChangeText={(text) => {
+                                setSearchQuery(text);
+                                searchIngredients(text);
+                            }}
+                        />
+                    </View>
+                </View>
+                <ScrollView style={{ marginTop: 16 }}>
+                    {searchResults.map((product, index) => (
+                        <Pressable
+                            key={product.id || index}
+                            onPress={() => {
+                                setSelectedIngredients([
+                                    ...selectedIngredients,
+                                    {
+                                        name: product.product_name,
+                                        image: product.image_small_url,
+                                        nutritionalValues: product.nutriments,
+                                    },
+                                ]);
+                                setSearchQuery('');
+                                setSearchResults([]);
+                                setModalVisible(false);
+                            }}
+                            style={{
+                                padding: 12,
+                                borderBottomWidth: 1,
+                                borderBottomColor: '#eee',
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                            }}
+                        >
+                            {product.image_small_url && (
+                                <Image
+                                    source={{ uri: product.image_small_url }}
+                                    style={{
+                                        width: 40,
+                                        height: 40,
+                                        marginRight: 12,
+                                        borderRadius: 4,
+                                    }}
+                                />
+                            )}
+                            <Text>
+                                {product.product_name || 'Unknown product'}
+                            </Text>
+                        </Pressable>
+                    ))}
+                </ScrollView>
+            </Modal>
         </View>
     );
 }

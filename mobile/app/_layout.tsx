@@ -8,6 +8,7 @@ import { router, Stack } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import 'react-native-reanimated';
 import '../global.css';
 
@@ -36,20 +37,31 @@ export default function RootLayout() {
     }, [isLoading, isAuthenticated]);
 
     return (
-        <ThemeProvider
-            value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
-        >
-            <Stack>
-                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                <Stack.Screen name="login" options={{ headerShown: false }} />
-                <Stack.Screen
-                    name="modal"
-                    options={{ presentation: 'modal', title: 'Modal' }}
-                />
-                <Stack.Screen name="signup" options={{ headerShown: false }} />
-            </Stack>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+            <ThemeProvider
+                value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+            >
+                <Stack>
+                    <Stack.Screen
+                        name="(tabs)"
+                        options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                        name="login"
+                        options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                        name="modal"
+                        options={{ presentation: 'modal', title: 'Modal' }}
+                    />
+                    <Stack.Screen
+                        name="signup"
+                        options={{ headerShown: false }}
+                    />
+                </Stack>
 
-            <StatusBar style="auto" />
-        </ThemeProvider>
+                <StatusBar style="auto" />
+            </ThemeProvider>
+        </GestureHandlerRootView>
     );
 }

@@ -99,14 +99,10 @@ export default function HomeScreen() {
     return (
         <View className="flex-1 bg-[#F7F4EF]">
             <SafeAreaView edges={['top']} className="bg-[#F7F4EF]/80 ">
-                <View className="flex-row items-center justify-between border-b border-black/5 px-6 py-4">
-                    <View className="w-10" />
-                    <Text className="text-xl font-bold tracking-tight text-[#6c8f66]">
-                        Mange Bien
+                <View className="flex-row justify-center border-b border-black/5 px-6 py-4">
+                    <Text className=" text-xl font-bold text-[#6c8f66]">
+                        MangeBien
                     </Text>
-                    <Pressable className="h-10 w-10 items-center justify-center rounded-full bg-[#F7F4EF] shadow-sm">
-                        <Ionicons name="search" size={20} color="#000" />
-                    </Pressable>
                 </View>
             </SafeAreaView>
 
@@ -114,7 +110,7 @@ export default function HomeScreen() {
                 <View className="py-6">
                     <View className="mb-3 flex-row items-center justify-between px-6">
                         <Text className="text-sm font-bold uppercase tracking-widest text-[#737972]">
-                            Featured Chefs
+                            Featured
                         </Text>
                         <Text className="text-xs font-semibold text-[#6c8f66]">
                             View All
